@@ -1,23 +1,50 @@
 <style>
+    .pfilter-container {
+        box-sizing: border-box;
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+        font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #222222;
+    }
+      
+    .pfilter-container *, .pfilter-container *:before, .pfilter-container *:after {
+        box-sizing: inherit;
+    }
+      
+    .pfilter-container ol, .pfilter-container ul {
+        list-style: none;
+    }
+    .pfilter-container a {
+        color:#222222;
+        transition: color 250ms;
+        
+    }
 
-    .filter-attr-container {
+    .pfilter-container a:hover {
+        color:#555555;
+        transition: color 250ms;
+    }
+
+    .pfilter-container .filter-attr-container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         padding: 0;
     }
-    .filter-attr {
+    .pfilter-container .filter-attr {
         border: 1px solid #ddd;
         list-style-type: none;
         margin: .5rem;
         padding: 1rem;
         flex: 1 1 auto;
     }
-    .filter-attr-title {
+    .pfilter-container .filter-attr-title {
         font-size: 120%;
         margin: .25rem;;
     }
-    .filter-attr-val-list {
+    .pfilter-container .filter-attr-val-list {
         list-style-type: none;
         padding: 0;
         display: flex;
@@ -25,28 +52,120 @@
         flex-direction: row;
     }
     
-    .filter-attr-val {
-        background-color: aliceblue;
-        border: 1px solid #ccc;
+    .pfilter-container .filter-attr-val {
+        background-color: #eee;
+        border: 1px solid #eee;
         padding: .25rem;
         margin: .25rem;
         min-width: 100px;
         flex: 1 1 auto;
         text-align: center;
         cursor: pointer;
+        transition: 250ms;
     }
-    .filter-attr-val:hover {
+    .pfilter-container .filter-attr-val:hover {
         background-color: #ddd;
         border-color: #bbb;
+        transition: 250ms;
+
     }
-    .violet {
-        background: violet;
+
+    .pfilter-page-list-container {
+        display: flex;
+        flex-wrap: wrap;
+      
     }
-    .blue {
-        color: blue;
+
+    .pfilter-page-list-item {
+        // border: 1px solid green;
+        display: flex; 
+        padding: 0.25em;
+        width: 100%;
     }
-    .orange {
-        color: orange;
+    
+    @media all and (min-width: 40em) {
+        .pfilter-page-list-item {
+          width: 50%;
+        }
+      }
+    @media all and (min-width: 60em) {
+        .pfilter-page-list-item {
+          width: 33.33%;
+        }
     }
+    .pfilter-page-list-card {
+        background-color: #f9f9f9;
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .pfilter-page-list-card-title {
+        font-size: 120%;
+        font-weight: 600;
+        margin: 0 0 1.5rem 0;
+    }
+
+    .pfilter-page-list-card-title {
+    }
+
+    .pfilter-page-list-card-content {
+        font-style: italic;
+    }
+
+    .pfilter-attr-list-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: .25rem 0;
+        align-items: middle;
+        justify-content: stretch;
+    }
+    .pfilter-attr-list-label {
+        font-style: italic;
+        padding: .1rem .5rem;
+        margin: .1rem 0;
         
+        flex: 0 1 auto;
+        align-self: start;
+        background-color: #dbdbdb;
+        border: 1px solid #dbdbdb;
+    }
+    .pfilter-attr-item-list {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .pfilter-attr-item {
+        padding: .1rem .5rem;
+        margin: .1rem;
+        background-color: #eee;
+        border: 1px solid #eee;
+        cursor: pointer;
+        transition: 250ms;
+    }
+
+    .pfilter-attr-item:hover {
+        background-color: #ddd;
+        border-color: #bbb;
+        transition: 250ms;
+    }
+
+    .{{ .hideclass }}
+    {
+        
+        display: none;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .filter-attr-val.selected,
+    .pfilter-attr-item.selected
+    {
+        background-color: #dbdbdb;
+        border-color: #aaa;
+
+    }
+
 </style>

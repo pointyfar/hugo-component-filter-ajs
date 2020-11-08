@@ -54,9 +54,9 @@ end
     <span class="filter-attr-title">{{ $term }}</span>
     <ul class="filter-attr-val-list">
         {{ range $key, $value := $taxonomy }}
-        <li class="filter-attr-val" @click="toggle('{{$term}}', '{{$key}}')" x-bind:class="evaluateVisibility(['{{(print $term "__" $key)}}'], 'violet')">
-            {{ $key }}
-            {{ $attrlist = $attrlist | append (print $term "__" $key) }}
+        <li class="filter-attr-val" @click="toggle('{{$term}}', '{{$key}}')" x-bind:class="checkActive(['{{(print $term "__" (urlize $key))}}'])">
+            {{(site.GetPage (print $term "/" $key )).Title}}
+            {{ $attrlist = $attrlist | append (print $term "__" (urlize $key)) }}
         </li>
         {{ end }}
     </ul>
@@ -65,5 +65,3 @@ end
 {{ end }}
 </ul>
 <hr>
-
-{{ $context.Scratch.Set "attrlist" $attrlist}}

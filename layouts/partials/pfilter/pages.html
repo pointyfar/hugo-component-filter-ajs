@@ -1,45 +1,67 @@
 {{ $pages := .pages }}
 {{ $attrs := .attrs }}
-{{ $attrlist := .context.Scratch.Get "attrlist" }}
 {{ $context := .context }}
+{{ $hideclass := .hideclass }}
 
-<table>
+<div class="pfilter-page-list-container">
 {{ range $pages }}
     {{ $page := . }}
     {{ $elattrs := slice }}
+    {{ $ea := dict }}
     {{ range $attrs }}
         {{ if eq . ".Section" }}
             {{ with $page.Section }}
+            {{ $ea = merge $ea (dict ".Section" (slice .) ) }}
             {{ $elattrs = $elattrs | append (print ".section__" .) }}
             {{ end }}
         {{ else if eq . ".Type" }}
+            {{ $ea = merge $ea (dict ".Type" (slice $page.Type) ) }}
             {{ $elattrs = $elattrs | append (print ".type__" $page.Type) }}
         {{ else if eq . ".Kind" }}
+            {{ $ea = merge $ea (dict ".Kind" (slice $page.Kind) ) }}
             {{ $elattrs = $elattrs | append  (print ".kind__" $page.Kind) }}
         {{ else }}
             {{ if isset $page.Params . }}
                 {{ $a := . }}
+                {{ $ea = merge $ea (dict . (index $page.Params .) ) }}
                 {{ range (index $page.Params .)}}
-                    {{ $elattrs = $elattrs | append (print $a "__" .) }}
+                    {{ $elattrs = $elattrs | append (print $a "__" (urlize .)) }}
                 {{ end }}
             {{ end }}
         {{ end }}
     {{ end }}
-    <tr>
-        {{ $pid := print "page_" (first 8 (md5 .Page.Permalink)) }}
-        <td>{{.Page}} [{{$pid}}]</td>
-        <td>
-            {{ $elattrs }}
-        </td>
-        <td 
-            x-bind:class="evaluateVisibility([{{range $elattrs}}'{{.}}',{{end}}])"
-        >
-            has match: <span>x</span>
-        </td>
-    </tr>
+
+    <div class="pfilter-page-list-item" x-bind:class="checkVisibility([{{range $elattrs}}'{{.}}',{{end}}])">
+        <div class="pfilter-page-list-card">
+
+            <div class="pfilter-page-list-card-title"><a href="{{.Permalink}}">{{.Title}}</a></div>
+            <div class="pfilter-page-list-card-attrs">
+                {{ range $k, $v := $ea }}
+                    <div class="pfilter-attr-list-container">
+                        <span class="pfilter-attr-list-label">{{ $k }}</span>
+                        <div  class="pfilter-attr-item-list">
+                        {{ range $v }}
+                            <span 
+                                    class="pfilter-attr-item" 
+                                    x-bind:class="checkActive(['{{(print $k "__" (urlize .))}}'])"
+                                    @click="toggle('{{$k}}', '{{urlize .}}')"
+                            >
+                                {{.}}
+                            </span>
+                        {{ end }}
+                        </div>
+                </div>
+                {{ end }}
+                <hr>
+            </div>
+            <div class="pfilter-page-list-card-content" >
+                {{ with $page.Summary }}{{ . }}{{ end }}
+            </div>
+        </div>
+    </div>
 
 {{ end }}
-</table>
+</div>
 
 <script>
 
@@ -60,26 +82,28 @@
     
         
         return {
-            list: [],
             visible: [],
-            lorem : {
-                foo: 'boo'
-            },
-            evaluateVisibility(l,c) {
-                console.log(this.visible.length)
+            checkVisibility(l,c) {
                 if(this.visible.length == 0) {
-                    console.log("nothing in visible[]")
-                    return "blue"
+                    return ""
                 } else {
                     let result = "x";
                     for(let i in l) {
                         console.log('vis?:',l[i], i, this.visible,this.visible.indexOf(l[i]));
                         if (this.visible.indexOf(l[i]) > -1) {
-                            return (c ? c : "red")
+                            return (c ? c : "")
                         } 
                     }
-                    return "orange"
+                    return "{{$hideclass}}"
                 }
+            },
+            checkActive(x){
+                if(this.visible.length > 0 ) {
+                    if (this.visible.indexOf(x[0]) > -1 ) {
+                        return "selected"
+                    }
+                }
+                return ''
             },
             toggle(x,y) {
                 let attr = x + "__" + y;
@@ -89,26 +113,9 @@
                 } else {
                     this.visible.push(attr)
                 }
-                let ix = this.lorem[x].indexOf(y);
-                if (ix>-1) {
-                    this.lorem[x].splice(ix,1)
-                    console.log('removing', y, 'from', x, 'at index', ix)
-                } else {
-                    this.lorem[x].push(y)
-                    console.log('pushing', y, 'in', x)
-                }
-                console.log('visible:', this.visible)
     
             },
             init() {
-                //this.visible.push('tags__chapter')
-                {{ range $attrlist }}
-                this.list.push('{{.}}')
-                {{ end }}
-                {{ range $attrs }}
-                this.lorem['{{.}}'] = [];
-                {{ end }}
-                console.log(this.list)
             }
         }
     }

@@ -1,6 +1,12 @@
-{{ define "head" }}
+<!DOCTYPE html>
+<html>
+    <head>
     {{ partialCached "jslibs/alpinejs/script-src.html" "-" }}
-{{ end }}
-{{ define "main" }}
-    {{ partial "pfilter/filter.html" (dict "pages" site.RegularPages "context" . "attrs" (slice "tags" "authors")  ) }}
-{{ end }}
+    </head>
+    <body>
+        <div class="pfilter-container">
+            {{ partial "pfilter/filter.html" (dict "pages" site.RegularPages "context" . "attrs" (slice "tags" "authors" ".Section" ".Kind" ".Type") "xhideclass" "is-hidden"  ) }}
+        </div>
+    </body>
+</html>
+

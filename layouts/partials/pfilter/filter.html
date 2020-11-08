@@ -2,11 +2,16 @@
 {{ $pages := slice }}
 {{ $attrs := slice }}
 {{ $context := .context }}
+{{ $hide := "pfilter-hide" }}
 
 {{ with .pages }}
     {{ $pages = . }}
 {{ else }}
     {{ $pages = site.RegularPages }}
+{{ end }}
+
+{{ with .hideclass }}
+    {{ $hide = . }}
 {{ end }}
 
 {{ with .attrs }}
@@ -15,6 +20,7 @@
     {{ $attrs = slice "tags" ".Section" ".Type" ".Kind" }}
 {{ end }}
 
-{{ partial "pfilter/style.html" (dict "pages" .pages "context" . "attrs" $attrs) }}
-{{ partial "pfilter/attrs.html" (dict "pages" .pages "context" . "attrs" $attrs) }}
-{{ partial "pfilter/pages.html" (dict "pages" .pages "context" . "attrs" $attrs)  }}
+{{ $options := (dict "pages" .pages "context" . "attrs" $attrs "hideclass" $hide ) }}
+{{ partial "pfilter/style.html" $options }}
+{{ partial "pfilter/attrs.html" $options }}
+{{ partial "pfilter/pages.html" $options }}
