@@ -1,0 +1,20 @@
+
+{{ $pages := slice }}
+{{ $attrs := slice }}
+{{ $context := .context }}
+
+{{ with .pages }}
+    {{ $pages = . }}
+{{ else }}
+    {{ $pages = site.RegularPages }}
+{{ end }}
+
+{{ with .attrs }}
+    {{ $attrs = . }}
+{{ else }}
+    {{ $attrs = slice "tags" ".Section" ".Type" ".Kind" }}
+{{ end }}
+
+{{ partial "pfilter/style.html" (dict "pages" .pages "context" . "attrs" $attrs) }}
+{{ partial "pfilter/attrs.html" (dict "pages" .pages "context" . "attrs" $attrs) }}
+{{ partial "pfilter/pages.html" (dict "pages" .pages "context" . "attrs" $attrs)  }}

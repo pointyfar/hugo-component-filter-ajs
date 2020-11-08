@@ -1,0 +1,6 @@
+{{ define "head" }}
+    {{ partialCached "jslibs/alpinejs/script-src.html" "-" }}
+{{ end }}
+{{ define "main" }}
+    {{ partial "pfilter/filter.html" (dict "pages" site.RegularPages "context" . "attrs" (slice "tags" "authors")  ) }}
+{{ end }}

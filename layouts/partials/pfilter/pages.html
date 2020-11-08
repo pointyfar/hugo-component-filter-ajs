@@ -1,0 +1,115 @@
+{{ $pages := .pages }}
+{{ $attrs := .attrs }}
+{{ $attrlist := .context.Scratch.Get "attrlist" }}
+{{ $context := .context }}
+
+<table>
+{{ range $pages }}
+    {{ $page := . }}
+    {{ $elattrs := slice }}
+    {{ range $attrs }}
+        {{ if eq . ".Section" }}
+            {{ with $page.Section }}
+            {{ $elattrs = $elattrs | append (print ".section__" .) }}
+            {{ end }}
+        {{ else if eq . ".Type" }}
+            {{ $elattrs = $elattrs | append (print ".type__" $page.Type) }}
+        {{ else if eq . ".Kind" }}
+            {{ $elattrs = $elattrs | append  (print ".kind__" $page.Kind) }}
+        {{ else }}
+            {{ if isset $page.Params . }}
+                {{ $a := . }}
+                {{ range (index $page.Params .)}}
+                    {{ $elattrs = $elattrs | append (print $a "__" .) }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    <tr>
+        {{ $pid := print "page_" (first 8 (md5 .Page.Permalink)) }}
+        <td>{{.Page}} [{{$pid}}]</td>
+        <td>
+            {{ $elattrs }}
+        </td>
+        <td 
+            x-bind:class="evaluateVisibility([{{range $elattrs}}'{{.}}',{{end}}])"
+        >
+            has match: <span>x</span>
+        </td>
+    </tr>
+
+{{ end }}
+</table>
+
+<script>
+
+    function toggleSelection(x,y,z) {
+        let data = {};
+        
+        {{ range $attrs }}
+        if (x == '{{.}}') {
+            data['{{.}}'] = [y];
+        }
+        {{ end }}
+        console.log(data)
+        return data 
+    }
+    
+    
+    function filtered(){
+    
+        
+        return {
+            list: [],
+            visible: [],
+            lorem : {
+                foo: 'boo'
+            },
+            evaluateVisibility(l,c) {
+                console.log(this.visible.length)
+                if(this.visible.length == 0) {
+                    console.log("nothing in visible[]")
+                    return "blue"
+                } else {
+                    let result = "x";
+                    for(let i in l) {
+                        console.log('vis?:',l[i], i, this.visible,this.visible.indexOf(l[i]));
+                        if (this.visible.indexOf(l[i]) > -1) {
+                            return (c ? c : "red")
+                        } 
+                    }
+                    return "orange"
+                }
+            },
+            toggle(x,y) {
+                let attr = x + "__" + y;
+                let li = this.visible.indexOf(attr);
+                if( li > -1 ) {
+                    this.visible.splice(li,1)
+                } else {
+                    this.visible.push(attr)
+                }
+                let ix = this.lorem[x].indexOf(y);
+                if (ix>-1) {
+                    this.lorem[x].splice(ix,1)
+                    console.log('removing', y, 'from', x, 'at index', ix)
+                } else {
+                    this.lorem[x].push(y)
+                    console.log('pushing', y, 'in', x)
+                }
+                console.log('visible:', this.visible)
+    
+            },
+            init() {
+                //this.visible.push('tags__chapter')
+                {{ range $attrlist }}
+                this.list.push('{{.}}')
+                {{ end }}
+                {{ range $attrs }}
+                this.lorem['{{.}}'] = [];
+                {{ end }}
+                console.log(this.list)
+            }
+        }
+    }
+</script>
