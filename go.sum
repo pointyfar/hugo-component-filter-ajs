@@ -1,0 +1,5 @@
+github.com/SimoTod/alpine-turbolinks-adapter v0.3.0/go.mod h1:KebmHFXD933AzXtw24J3MbhcN7lrdMvIbmU3H7sex+M=
+github.com/alpinejs/alpine v2.7.0+incompatible/go.mod h1:BKI81egATMnaKqFeX5HEfYMnjZjcjcZmrYAu5Nck+EY=
+github.com/gohugoio/hugo-mod-jslibs v0.0.0-20201016143315-941a684e1307 h1:TqbzrmnDVTzCpmrSG6iiWk8bZ0oXv/kUH1gj0c2mutw=
+github.com/gohugoio/hugo-mod-jslibs/alpinejs v0.7.1 h1:j6Il3GQqjc6oiLu7es1qnbkEkx+3KOey3vzUcY0+rKo=
+github.com/gohugoio/hugo-mod-jslibs/alpinejs v0.7.1/go.mod h1:e1pgFkSbGd2EzKUbAuXHSnVqMX2suwsSklPZfDXeQkg=
