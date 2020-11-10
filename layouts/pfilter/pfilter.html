@@ -3,8 +3,8 @@
     <head>
     {{ partialCached "jslibs/alpinejs/script-src.html" "-" }}
     </head>
-    <body>
-        <div class="pfilter-container">
+    <body  class="pfilter-container">
+        <div>
             {{ partial "pfilter/filter.html" (dict "pages" site.RegularPages "context" . "attrs" (slice "tags" "authors" ".Section" ".Kind" ".Type") "xhideclass" "is-hidden"  ) }}
         </div>
     </body>

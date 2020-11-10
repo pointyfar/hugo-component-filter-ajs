@@ -3,11 +3,7 @@
 {{ $attrs := .attrs }}
 {{ $attrlist := slice }}
 <div x-data="filtered()" x-init="init()">
-<hr>
-start
-<div x-ref="attrlist" x-text="visible" >
-</div>
-end
+
 <ul class="filter-attr-container">
 
 {{ range $attrs }}
@@ -47,7 +43,8 @@ end
     </li>
     {{ end }}
 {{ end }}
-
+</ul>
+<ul class="filter-attr-container">
 {{ range $term, $taxonomy := site.Taxonomies }}
 {{ if in $attrs $term }}
 <li class="filter-attr">
